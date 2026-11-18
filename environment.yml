@@ -1,0 +1,7 @@
+name: hdloc
+channels: [conda-forge]
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+      - -e .[datasets,dev]

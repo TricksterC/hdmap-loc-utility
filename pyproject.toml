@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hdloc"
+version = "0.1.0"
+description = "Localization utility of online vectorized HD maps"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy", "scipy", "pandas", "matplotlib", "pyyaml",
+  "opencv-python", "shapely", "tqdm",
+]
+
+[project.optional-dependencies]
+datasets = ["nuscenes-devkit", "av2"]
+dev = ["pytest", "ruff"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
