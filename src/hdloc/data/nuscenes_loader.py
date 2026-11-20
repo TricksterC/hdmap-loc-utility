@@ -44,3 +44,10 @@ def load_local_map(nmap: NuScenesMap, x: float, y: float, radius: float = 50.0) 
 
 def to_ego(vmap: VectorMap, x: float, y: float, yaw: float) -> VectorMap:
     return vmap.transformed(lambda p: global_to_ego(p, x, y, yaw), frame="ego")
+
+def load_trajectory_map(nmap: NuScenesMap, poses: np.ndarray, margin: float = 80.0) -> VectorMap:
+    """Map elements covering a whole trajectory plus a margin, in the global frame."""
+    xs, ys = poses[:, 0], poses[:, 1]
+    cx, cy = (xs.min() + xs.max()) / 2, (ys.min() + ys.max()) / 2
+    half = max(xs.max() - xs.min(), ys.max() - ys.min()) / 2
+    return load_local_map(nmap, cx, cy, radius=half + margin)
