@@ -19,4 +19,6 @@ for e in m.elements:
 plt.plot(0, 0, "k^", markersize=12)
 plt.axis("equal")
 plt.title(f"{nusc.scene[0]['name']} (ego frame, car at origin facing +x)")
-plt.savefig("scene_check.png", dpi=150)
+out = Path(__file__).resolve().parents[1] / "results" / "figures"
+out.mkdir(parents=True, exist_ok=True)
+plt.savefig(out / "scene_check.png", dpi=150)
