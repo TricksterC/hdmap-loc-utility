@@ -12,9 +12,12 @@ ROOT = REPO / "data" / "nuscenes" / "v1.0-mini"
 
 nusc = NuScenes(version="v1.0-mini", dataroot=str(ROOT), verbose=False)
 scene = nusc.scene[0]
+
+# Load vehicle's entire trajectory
 map_name, poses = load_scene_poses(nusc, scene)
 nmap = NuScenesMap(dataroot=str(ROOT), map_name=map_name)
 
+# Extract relevant features from HD map
 vmap = load_trajectory_map(nmap, poses)
 grid = grid_for_poses(poses, margin=80.0, resolution=0.2)
 prior = build_prior(vmap, grid, max_dist=10.0)
