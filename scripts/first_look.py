@@ -1,7 +1,10 @@
+from pathlib import Path
+
 from nuscenes.map_expansion.map_api import NuScenesMap
 from nuscenes.nuscenes import NuScenes
 
-DATAROOT = "data/nuscenes/v1.0-mini"
+REPO = Path(__file__).resolve().parents[1]
+DATAROOT = str(REPO / "data" / "nuscenes" / "v1.0-mini")
 
 nusc = NuScenes(version="v1.0-mini", dataroot=DATAROOT, verbose=False)
 scene = nusc.scene[0]
