@@ -24,7 +24,8 @@ x, y, _ = pose["translation"]
 print("Ego position (global):", round(x, 2), round(y, 2))
 print("Ego rotation (quaternion):", pose["rotation"])
 
-# Print all lane dividers, road dividers, pedestrian crossings, and stop lines that intersect a 100 m × 100 m region around the vehicle.
+# Print all lane dividers, road dividers, pedestrian crossings,
+# and stop lines that intersect a 100 m × 100 m region around the vehicle.
 nmap = NuScenesMap(dataroot=DATAROOT, map_name=log["location"])
 layers = ["lane_divider", "road_divider", "ped_crossing", "stop_line"]
 patch = (x - 50, y - 50, x + 50, y + 50)

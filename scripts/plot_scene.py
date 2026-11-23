@@ -18,7 +18,8 @@ nmap = NuScenesMap(dataroot=str(ROOT), map_name=map_name)
 # Retrieve vehicle initial position and heading
 x, y, yaw = poses[0]
 
-# Extract map features near the vehicle & convert their coordinates from global to vehicle's coordinate frame
+# Extract map features near the vehicle & convert their coordinates 
+# from global to vehicle's coordinate frame
 m = to_ego(load_local_map(nmap, x, y), x, y, yaw)
 
 # Plot extracted features

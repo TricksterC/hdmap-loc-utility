@@ -1,0 +1,17 @@
+n_particles: 500
+trans_noise: 0.15
+yaw_noise: 0.01
+ess_threshold: 0.5
+roughen_xy: 0.03
+roughen_yaw: 0.002
+init_xy: 1.0
+init_yaw: 0.05
+obs:
+  spacing: 1.0
+  sigma: 0.5
+  trunc: 3.0
+  class_weights:
+    divider: 1.0
+    boundary: 1.0
+    ped_crossing: 1.0
+    stop_line: 1.0
