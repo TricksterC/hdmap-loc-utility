@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Localization utility of online vectorized HD maps"
 requires-python = ">=3.10"
 dependencies = [
-  "numpy", "scipy", "pandas", "matplotlib", "pyyaml",
+  "numpy<2", "scipy", "pandas<2.3", "matplotlib", "pyyaml",
   "opencv-python", "shapely", "tqdm",
 ]
 
