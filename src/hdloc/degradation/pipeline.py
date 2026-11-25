@@ -5,6 +5,7 @@ import numpy as np
 from hdloc.data.schema import TRANSVERSE, VectorMap
 from hdloc.degradation.dropout import add_false_positives, drop_classes, drop_elements
 from hdloc.degradation.geometric import jitter_map, rotate_map, shift_map
+from hdloc.degradation.orientation import split_by_orientation
 
 KINDS = (
     "lateral_shift",
@@ -20,6 +21,8 @@ KINDS = (
     "drop_all",
     "drift_scale_error",
     "drift_yaw_bias",
+    "drop_across",
+    "drop_along",
 )
 
 
@@ -51,4 +54,8 @@ def degrade(
         return VectorMap([], vmap.frame) if value else vmap
     if kind in ("drift_scale_error", "drift_yaw_bias"):
         return vmap  # these change the odometry, not the map; see evaluate()
+    if kind == "drop_across":  # keep only segments along the road
+        return split_by_orientation(vmap, "along") if value else vmap
+    if kind == "drop_along":  # keep only segments across the road
+        return split_by_orientation(vmap, "across") if value else vmap
     raise ValueError(f"unknown degradation: {kind}")
