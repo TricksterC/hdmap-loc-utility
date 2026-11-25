@@ -16,11 +16,16 @@ ap = argparse.ArgumentParser()
 ap.add_argument("--kinds", nargs="*", help="subset of sweeps to run")
 ap.add_argument("--scenes", nargs="*", type=int, help="scene indices (default: all)")
 ap.add_argument("--seeds", type=int, help="use only the first N seeds")
+ap.add_argument("--out", default="transfer_sweep", help="output file stem in results/")
+ap.add_argument("--scale-error", type=float, help="override the config odometry scale error")
 args = ap.parse_args()
 
 cfg = load_yaml(REPO / "configs" / "degradations.yaml")
 fcfg = FilterConfig.from_dict(load_yaml(REPO / "configs" / "filter.yaml"))
-drift = DriftModel(**cfg["drift"])
+drift_cfg = dict(cfg["drift"])
+if args.scale_error is not None:
+    drift_cfg["scale_error"] = args.scale_error
+drift = DriftModel(**drift_cfg)
 seeds = cfg["seeds"][: args.seeds] if args.seeds else cfg["seeds"]
 kinds = args.kinds or list(cfg["sweeps"])
 
@@ -45,13 +50,13 @@ for scene in load_scenes(ROOT, args.scenes):
 
 df = pd.DataFrame(rows)
 (REPO / "results").mkdir(exist_ok=True)
-df.to_csv(REPO / "results" / "transfer_sweep.csv", index=False)
+df.to_csv(REPO / "results" / f"{args.out}.csv", index=False)
 
 moving = df[df.path_len > 10.0]  # leave (near-)stationary scenes out of the summary
 cols = ["pf_lon_med", "pf_lat_med", "odo_lon_med", "odo_lat_med", "transverse_frac"]
 print(moving.groupby(["kind", "value"])[cols].median().round(2).to_string())
 
-fig, axes = plt.subplots(2, 5, figsize=(20, 7))
+fig, axes = plt.subplots(3, 5, figsize=(20, 10))
 for ax, kind in zip(axes.ravel(), kinds):
     g = moving[moving.kind == kind].groupby("value")
     for col, fmt, label in (
@@ -69,5 +74,5 @@ for ax in axes.ravel()[len(kinds) :]:
 out = REPO / "results" / "figures"
 out.mkdir(parents=True, exist_ok=True)
 fig.tight_layout()
-fig.savefig(out / "transfer_curves.png", dpi=130)
-print("saved", out / "transfer_curves.png")
+fig.savefig(out / f"{args.out}.png", dpi=130)
+print("saved", out / f"{args.out}.png")

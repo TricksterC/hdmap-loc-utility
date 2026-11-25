@@ -16,6 +16,10 @@ KINDS = (
     "false_dividers",
     "false_stop_lines",
     "range_m",
+    "drop_dividers",
+    "drop_all",
+    "drift_scale_error",
+    "drift_yaw_bias",
 )
 
 
@@ -41,4 +45,10 @@ def degrade(
         return add_false_positives(vmap, value, rng, radius, "stop_line")
     if kind == "range_m":
         return vmap  # the range cut itself is applied by observe(); see evaluate()
+    if kind == "drop_dividers":
+        return drop_classes(vmap, ("divider", "boundary")) if value else vmap
+    if kind == "drop_all":
+        return VectorMap([], vmap.frame) if value else vmap
+    if kind in ("drift_scale_error", "drift_yaw_bias"):
+        return vmap  # these change the odometry, not the map; see evaluate()
     raise ValueError(f"unknown degradation: {kind}")

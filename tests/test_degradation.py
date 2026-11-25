@@ -60,3 +60,12 @@ def test_false_positives_are_added_inside_range():
 def test_unknown_kind_raises():
     with pytest.raises(ValueError):
         degrade(_map(), "nonsense", 1.0, np.random.default_rng(0), 50.0)
+
+
+def test_new_ablation_kinds():
+    m = _map()
+    rng = np.random.default_rng(0)
+    assert degrade(m, "drop_all", 1, rng, 50.0).elements == []
+    out = degrade(m, "drop_dividers", 1, rng, 50.0)
+    assert len(out.of_class("divider")) == 0 and len(out.of_class("stop_line")) == 20
+    assert len(degrade(m, "drop_dividers", 0, rng, 50.0).elements) == 220

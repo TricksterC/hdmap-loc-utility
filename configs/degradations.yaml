@@ -15,3 +15,7 @@ sweeps:
   false_dividers: [0, 2, 5, 10]                    # number of hallucinated segments
   false_stop_lines: [0, 2, 5, 10]
   range_m: [15, 30, 50]                            # perception range
+  drop_dividers: [0, 1]                            # 1 = remove all lane dividers
+  drop_all: [0, 1]                                 # 1 = empty map (no-map anchor)
+  drift_scale_error: [0.0, 0.01, 0.03, 0.06]       # odometry, not the map
+  drift_yaw_bias: [0.0, 0.003, 0.01]               # rad per step

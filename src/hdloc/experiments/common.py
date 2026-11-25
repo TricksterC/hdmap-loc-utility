@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 
 import numpy as np
@@ -59,6 +59,10 @@ def evaluate(
     radius: float = 50.0,
 ) -> dict:
     """One filter run with one degradation. Separate RNGs keep runs paired across values."""
+    if kind == "drift_scale_error":
+        drift = replace(drift, scale_error=float(value))
+    elif kind == "drift_yaw_bias":
+        drift = replace(drift, yaw_bias=float(value))
     rng_drift = np.random.default_rng(seed)
     rng_deg = np.random.default_rng(seed + 1000)
     rng_pf = np.random.default_rng(seed + 2000)
