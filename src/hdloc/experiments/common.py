@@ -14,6 +14,7 @@ from hdloc.localization.particle_filter import FilterConfig, run_filter
 from hdloc.maps.observe import densify_map, observe
 from hdloc.maps.prior_map import PriorMap, build_prior, grid_for_poses
 from hdloc.metrics.loc_metrics import pose_errors
+from hdloc.metrics.map_metrics import MapMetricAccumulator
 
 
 @dataclass
@@ -72,15 +73,18 @@ def evaluate(
     dead = odometry_only(gt[0], incs)
 
     obs_radius = float(value) if kind == "range_m" else radius
+    acc = MapMetricAccumulator(obs_radius)
     obs = []
     for pose in gt:
-        seen = observe(scene.vmap, pose, obs_radius)
-        seen = degrade(seen, kind, value, rng_deg, obs_radius)
+        truth = observe(scene.vmap, pose, obs_radius)
+        seen = degrade(truth, kind, value, rng_deg, obs_radius)
+        acc.add(truth, seen)
         obs.append(sample_points(seen, filter_cfg.obs.spacing))
 
     est, _ = run_filter(scene.prior, gt[0], incs, obs, filter_cfg, rng_pf)
 
     out = {"transverse_frac": float(np.mean([any(c in o for c in TRANSVERSE) for o in obs]))}
+    out.update(acc.result())
     errs = {"pf": pose_errors(est, gt), "odo": pose_errors(dead, gt)}
     for tag, e in errs.items():
         out[f"{tag}_lon_med"] = float(np.median(np.abs(e["lon"])))

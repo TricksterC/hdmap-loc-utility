@@ -47,11 +47,11 @@ class Grid:
         return np.stack([u, v], axis=1)
 
 
-def rasterize_class(vmap: VectorMap, cls: str, grid: Grid) -> np.ndarray:
+def rasterize_class(vmap: VectorMap, cls: str, grid: Grid, thickness: int = 1) -> np.ndarray:
     """Binary image (uint8, 1 = line pixel) of all elements of one class."""
     img = np.zeros(grid.shape, dtype=np.uint8)
     for e in vmap.of_class(cls):
         uv = np.round(grid.world_to_pix(e.points))
         uv = np.clip(uv, -100_000, 100_000).astype(np.int32)
-        cv2.polylines(img, [uv.reshape(-1, 1, 2)], isClosed=False, color=1, thickness=1)
+        cv2.polylines(img, [uv.reshape(-1, 1, 2)], isClosed=False, color=1, thickness=thickness)
     return img
