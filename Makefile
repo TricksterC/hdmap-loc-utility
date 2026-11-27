@@ -18,8 +18,3 @@ check:	fix test
 
 sweep:
 	python3 scripts/run_transfer_sweep.py
-
-
-
-
-
