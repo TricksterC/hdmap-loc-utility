@@ -21,6 +21,7 @@ ap.add_argument("--files", nargs="*", default=["transfer_sweep", "map_ablations"
 args = ap.parse_args()
 
 df = pd.concat([pd.read_csv(REPO / "results" / f"{f}.csv") for f in args.files], ignore_index=True)
+df = df.drop_duplicates(["scene", "kind", "value", "seed"]).reset_index(drop=True)
 df = df[(df.path_len > 10.0) & ~df.kind.str.startswith("drift_") & (df.kind != "range_m")].copy()
 df = df[df.align_lat_med.notna()].copy()
 ident = {"lateral_shift": 0, "longitudinal_shift": 0, "rotation_deg": 0, "jitter_sigma": 0,

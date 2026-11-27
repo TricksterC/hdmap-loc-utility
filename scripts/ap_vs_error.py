@@ -20,6 +20,7 @@ for f in args.files:
     else:
         print("missing", p)
 df = pd.concat(frames, ignore_index=True)
+df = df.drop_duplicates(["scene", "kind", "value", "seed"]).reset_index(drop=True)
 assert "map_ap" in df.columns, "re-run the sweeps: these CSVs have no AP columns yet"
 df = df[(df.path_len > 10.0) & ~df.kind.str.startswith("drift_")].copy()
 

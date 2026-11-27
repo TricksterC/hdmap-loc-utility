@@ -26,6 +26,7 @@ ap.add_argument("--files", nargs="*", default=["transfer_sweep", "map_ablations"
 args = ap.parse_args()
 
 df = pd.concat([pd.read_csv(REPO / "results" / f"{f}.csv") for f in args.files], ignore_index=True)
+df = df.drop_duplicates(["scene", "kind", "value", "seed"]).reset_index(drop=True)
 assert "align_lat_med" in df.columns, "re-run the sweeps: these CSVs have no alignment columns"
 
 # comparable population: moving scenes, no odometry sweeps, no range cut (AP is 1 by
