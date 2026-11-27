@@ -1,0 +1,110 @@
+48 scenes, 7056 runs, 14 worker(s)
+finished scene-0073  (33 s)
+finished scene-0162  (55 s)
+finished scene-0235  (68 s)
+finished scene-0448  (73 s)
+finished scene-0450  (86 s)
+finished scene-0453  (140 s)
+finished scene-0518  (160 s)
+finished scene-0600  (163 s)
+finished scene-0630  (175 s)
+finished scene-0708  (192 s)
+finished scene-0739  (211 s)
+finished scene-0914  (222 s)
+finished scene-0410  (229 s)
+finished scene-1044  (242 s)
+finished scene-1061  (245 s)
+finished scene-1063  (250 s)
+finished scene-1064  (260 s)
+finished scene-1068  (268 s)
+finished scene-1070  (276 s)
+finished scene-1073  (291 s)
+finished scene-1075  (294 s)
+finished scene-1079  (311 s)
+finished scene-1088  (316 s)
+finished scene-1106  (328 s)
+finished scene-0003  (332 s)
+finished scene-0027  (345 s)
+finished scene-0034  (351 s)
+finished scene-0058  (362 s)
+finished scene-0124  (366 s)
+finished scene-0138  (373 s)
+finished scene-0149  (381 s)
+finished scene-0150  (390 s)
+finished scene-0155  (396 s)
+finished scene-0275  (419 s)
+finished scene-0376  (424 s)
+finished scene-0979  (440 s)
+finished scene-0177  (447 s)
+finished scene-0439  (452 s)
+finished scene-0800  (460 s)
+finished scene-0802  (465 s)
+finished scene-0847  (469 s)
+finished scene-0862  (487 s)
+finished scene-0865  (496 s)
+finished scene-0997  (500 s)
+finished scene-1011  (503 s)
+finished scene-1012  (507 s)
+finished scene-1024  (513 s)
+finished scene-1025  (518 s)
+                           pf_lon_med  pf_lat_med  odo_lon_med  odo_lat_med  transverse_frac
+kind               value                                                                    
+drift_scale_error  0.000         0.03        0.02         0.10         1.64             1.00
+                   0.010         0.09        0.02         0.51         1.66             1.00
+                   0.030         0.28        0.03         1.63         1.72             1.00
+                   0.060         0.59        0.05         3.26         1.71             1.00
+drift_yaw_bias     0.000         0.28        0.03         1.76         0.19             1.00
+                   0.003         0.28        0.03         1.63         1.72             1.00
+                   0.010         0.27        0.04         1.45         5.70             1.00
+drop_all           0.000         0.28        0.03         1.63         1.72             1.00
+                   1.000         1.56        1.78         1.63         1.72             0.00
+drop_dividers      0.000         0.28        0.03         1.63         1.72             1.00
+                   1.000         0.31        0.09         1.63         1.72             1.00
+drop_transverse    0.000         0.28        0.03         1.63         1.72             1.00
+                   1.000         0.59        0.04         1.63         1.72             0.00
+element_dropout    0.000         0.28        0.03         1.63         1.72             1.00
+                   0.200         0.30        0.03         1.63         1.72             1.00
+                   0.400         0.32        0.03         1.63         1.72             0.95
+                   0.600         0.31        0.04         1.63         1.72             0.87
+                   0.800         0.40        0.05         1.63         1.72             0.64
+false_dividers     0.000         0.28        0.03         1.63         1.72             1.00
+                   2.000         0.29        0.03         1.63         1.72             1.00
+                   5.000         0.29        0.04         1.63         1.72             1.00
+                   10.000        0.30        0.04         1.63         1.72             1.00
+false_stop_lines   0.000         0.28        0.03         1.63         1.72             1.00
+                   2.000         0.30        0.03         1.63         1.72             1.00
+                   5.000         0.30        0.03         1.63         1.72             1.00
+                   10.000        0.34        0.03         1.63         1.72             1.00
+jitter_sigma       0.000         0.28        0.03         1.63         1.72             1.00
+                   0.100         0.28        0.03         1.63         1.72             1.00
+                   0.250         0.26        0.03         1.63         1.72             1.00
+                   0.500         0.29        0.03         1.63         1.72             1.00
+                   1.000         0.30        0.04         1.63         1.72             1.00
+lateral_shift      0.000         0.28        0.03         1.63         1.72             1.00
+                   0.250         0.28        0.25         1.63         1.72             1.00
+                   0.500         0.30        0.50         1.63         1.72             1.00
+                   1.000         0.32        1.00         1.63         1.72             1.00
+                   2.000         0.37        1.99         1.63         1.72             1.00
+longitudinal_shift 0.000         0.28        0.03         1.63         1.72             1.00
+                   0.250         0.15        0.03         1.63         1.72             1.00
+                   0.500         0.28        0.03         1.63         1.72             1.00
+                   1.000         0.71        0.04         1.63         1.72             1.00
+                   2.000         1.65        0.05         1.63         1.72             1.00
+range_m            15.000        0.39        0.04         1.63         1.72             0.56
+                   30.000        0.31        0.03         1.63         1.72             0.84
+                   50.000        0.28        0.03         1.63         1.72             1.00
+rotation_deg       0.000         0.28        0.03         1.63         1.72             1.00
+                   0.500         0.29        0.06         1.63         1.72             1.00
+                   1.000         0.27        0.12         1.63         1.72             1.00
+                   2.000         0.26        0.24         1.63         1.72             1.00
+                   4.000         0.26        0.51         1.63         1.72             1.00
+
+diverged runs: 114 of 7056
+kind
+drift_scale_error    12
+drop_all             86
+drop_dividers        11
+drop_transverse       3
+range_m               1
+rotation_deg          1
+saved /home/sru/Programs/HD_Localization_Utility/results/figures/heldout_sweep.png
