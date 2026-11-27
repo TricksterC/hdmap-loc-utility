@@ -14,6 +14,7 @@ from hdloc.localization.particle_filter import FilterConfig, run_filter
 from hdloc.maps.observe import densify_map, observe
 from hdloc.maps.prior_map import PriorMap, build_prior, grid_for_poses
 from hdloc.metrics.alignment import AlignmentAccumulator
+from hdloc.metrics.convergence import convergence_summary
 from hdloc.metrics.loc_metrics import pose_errors
 from hdloc.metrics.map_metrics import MapMetricAccumulator
 
@@ -31,17 +32,31 @@ class SceneData:
         return float(np.linalg.norm(np.diff(self.poses[:, :2], axis=0), axis=1).sum())
 
 
-def load_scenes(root: Path | str, indices=None, resolution=0.2, margin=80.0) -> list[SceneData]:
+def load_scenes(
+    root: Path | str,
+    indices=None,
+    resolution=0.2,
+    margin=80.0,
+    version="v1.0-mini",
+    names=None,
+) -> list[SceneData]:
     from nuscenes.map_expansion.map_api import NuScenesMap
     from nuscenes.nuscenes import NuScenes
 
     from hdloc.data.nuscenes_loader import load_scene_poses, load_trajectory_map
 
-    nusc = NuScenes(version="v1.0-mini", dataroot=str(root), verbose=False)
+    nusc = NuScenes(version=version, dataroot=str(root), verbose=False)
+    if names:
+        by_name = {s["name"]: s for s in nusc.scene}
+        missing = [n for n in names if n not in by_name]
+        if missing:
+            raise KeyError(f"scenes not in {version}: {missing[:5]}")
+        chosen = [by_name[n] for n in names]
+    else:
+        chosen = [nusc.scene[i] for i in (indices if indices else range(len(nusc.scene)))]
     maps: dict = {}
     scenes = []
-    for i in indices if indices else range(len(nusc.scene)):
-        scene = nusc.scene[i]
+    for scene in chosen:
         map_name, poses = load_scene_poses(nusc, scene)
         if map_name not in maps:
             maps[map_name] = NuScenesMap(dataroot=str(root), map_name=map_name)
@@ -90,6 +105,7 @@ def evaluate(
     out.update(acc.result())
     out.update(al.result())
     errs = {"pf": pose_errors(est, gt), "odo": pose_errors(dead, gt)}
+    out.update(convergence_summary(errs["pf"]))
     for tag, e in errs.items():
         out[f"{tag}_lon_med"] = float(np.median(np.abs(e["lon"])))
         out[f"{tag}_lat_med"] = float(np.median(np.abs(e["lat"])))

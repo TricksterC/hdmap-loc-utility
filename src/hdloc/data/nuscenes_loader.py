@@ -51,3 +51,13 @@ def load_trajectory_map(nmap: NuScenesMap, poses: np.ndarray, margin: float = 80
     cx, cy = (xs.min() + xs.max()) / 2, (ys.min() + ys.max()) / 2
     half = max(xs.max() - xs.min(), ys.max() - ys.min()) / 2
     return load_local_map(nmap, cx, cy, radius=half + margin)
+
+def scene_table(nusc: NuScenes) -> list[dict]:
+    """One row per scene: name, location, number of keyframes, path length in metres."""
+    rows = []
+    for scene in nusc.scene:
+        location, poses = load_scene_poses(nusc, scene)
+        steps = np.linalg.norm(np.diff(poses[:, :2], axis=0), axis=1)
+        rows.append({"name": scene["name"], "location": location,
+                     "n_samples": len(poses), "path_len": float(steps.sum())})
+    return rows

@@ -61,6 +61,17 @@ for grp, g in df.groupby("group"):
         print(f"{grp:10s}{name:13s}{len(g):5d}{rng:>14s}"
               f"{cells[0]:>22s}{cells[1]:>22s}{cells[2]:>22s}")
 
+print("\nA2. Coherent families one at a time: |Spearman rho| [95% CI over scenes]")
+print(f"{'family':20s}{'error':13s}{'alignment':>22s}{'AP':>22s}{'mIoU':>22s}")
+for fam in COHERENT:
+    g = df[df.kind == fam]
+    for name, acol, ecol in COMPONENTS:
+        cells = []
+        for lab, col in SCORES:
+            r = rho(g[acol if col is None else col], g[ecol], g.scene)
+            cells.append(f"{r[0]:.2f} [{r[1]:.2f},{r[2]:.2f}]")
+        print(f"{fam:20s}{name:13s}{cells[0]:>22s}{cells[1]:>22s}{cells[2]:>22s}")
+
 
 def pav(x, y):
     """Isotonic (non-decreasing) fit of y on x; returns a predict function."""
@@ -80,18 +91,22 @@ def pav(x, y):
 
 print("\nB. Leave-one-scene-out mean absolute error of predicting |pose error| (metres / deg)")
 print("   alignment: prediction = offset itself (no fitting).")
-print("     AP, mIoU: isotonic fit on other scenes.")
-print(f"{'group':10s}{'error':13s}{'predict 0':>11s}{'alignment':>11s}{'AP':>9s}{'mIoU':>9s}")
+print("   align+c: offset plus one fitted constant (the error floor), fit on the other scenes.")
+print("   AP, mIoU: isotonic fit on the other scenes.")
+print(f"{'group':10s}{'error':13s}{'predict 0':>11s}{'alignment':>11s}{'align+c':>9s}"
+      f"{'AP':>9s}{'mIoU':>9s}")
 for grp, g in list(df.groupby("group")) + [("all", df)]:
     for name, acol, ecol in COMPONENTS:
         y = g[ecol].abs().to_numpy()
         pred = {"zero": np.zeros(len(g)), "align": g[acol].abs().to_numpy(),
-                "AP": np.zeros(len(g)), "mIoU": np.zeros(len(g))}
+                "AP": np.zeros(len(g)), "mIoU": np.zeros(len(g)), "align+c": np.zeros(len(g))}
         for s in g.scene.unique():
             te, tr = (g.scene == s).to_numpy(), (g.scene != s).to_numpy()
+            off = g[acol].abs().to_numpy()
+            pred["align+c"][te] = off[te] + max(float(np.median(y[tr] - off[tr])), 0.0)
             for lab, col in (("AP", "map_ap"), ("mIoU", "map_miou")):
                 f = pav(-g.loc[tr, col].to_numpy(), y[tr])
                 pred[lab][te] = f(-g.loc[te, col].to_numpy())
         mae = {k: float(np.mean(np.abs(v - y))) for k, v in pred.items()}
-        print(f"{grp:10s}{name:13s}{mae['zero']:11.3f}{mae['align']:11.3f}"
+        print(f"{grp:10s}{name:13s}{mae['zero']:11.3f}{mae['align']:11.3f}{mae['align+c']:9.3f}"
               f"{mae['AP']:9.3f}{mae['mIoU']:9.3f}")
