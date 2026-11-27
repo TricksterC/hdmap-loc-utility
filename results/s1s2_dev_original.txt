@@ -1,0 +1,28 @@
+912 runs, 8 scenes, 10 degradation families
+
+S1: pooled |Spearman rho| with 95% CI (bootstrap over scenes)
+error                     alignment                    AP                  mIoU   verdict
+lateral            0.33 [0.18,0.49]      0.35 [0.31,0.42]      0.50 [0.43,0.59]   FAIL
+longitudinal      0.11 [-0.07,0.29]      0.37 [0.29,0.45]      0.31 [0.21,0.41]   FAIL
+heading            0.33 [0.18,0.47]      0.40 [0.37,0.46]      0.44 [0.40,0.51]   FAIL
+
+S2: spread of pose error inside equal-count score bins (1 = perfect, lower is better)
+error           alignment        AP      mIoU   verdict
+lateral               6.1       8.0       6.7   PASS
+longitudinal          9.3       9.4       7.4   FAIL
+heading               2.4       3.0       3.1   PASS
+
+Where the offset misses: median (pose error - alignment offset) per family
+                    lateral  longitudinal  heading
+kind                                              
+drop_all               0.02         -0.00     0.13
+drop_dividers          0.04         -0.00     0.16
+drop_transverse        0.03         -0.00     0.16
+element_dropout        0.03          0.00     0.15
+false_dividers         0.03         -0.00     0.14
+false_stop_lines       0.02         -0.00     0.14
+jitter_sigma           0.02         -0.00     0.12
+lateral_shift          0.00         -0.00     0.15
+longitudinal_shift     0.03         -0.42     0.14
+rotation_deg           0.11         -0.00    -0.15
+saved /home/sru/Programs/HD_Localization_Utility/results/figures/align_vs_error.png
