@@ -29,9 +29,9 @@ identity = {"lateral_shift": 0, "longitudinal_shift": 0, "rotation_deg": 0, "jit
             "element_dropout": 0, "drop_transverse": 0, "false_dividers": 0,
             "false_stop_lines": 0, "drop_dividers": 0, "drop_all": 0, "range_m": 50}
 is_id = np.array([identity.get(k) == v for k, v in zip(df.kind, df.value)])
-base = df[is_id].groupby(["scene", "seed"]).pf_lon_med.median().rename("lon_base")
+base = df[is_id].groupby(["scene", "seed"]).pf_lon_bias.median().rename("lon_base")
 df = df.join(base, on=["scene", "seed"])
-df["lon_excess"] = df.pf_lon_med - df.lon_base
+df["lon_excess"] = (df.pf_lon_bias - df.lon_base).abs()
 print(f"{len(df)} runs, {df.scene.nunique()} scenes, {df.kind.nunique()} degradation families")
 
 cols = ["map_ap", "map_miou", "pf_lat_med", "lon_excess"]

@@ -28,9 +28,9 @@ ident = {"lateral_shift": 0, "longitudinal_shift": 0, "rotation_deg": 0, "jitter
          "element_dropout": 0, "drop_transverse": 0, "false_dividers": 0, "false_stop_lines": 0,
          "drop_dividers": 0}
 is_id = np.array([ident.get(k) == v for k, v in zip(df.kind, df.value)])
-base = df[is_id].groupby(["scene", "seed"]).pf_lon_med.median().rename("lon_base")
+base = df[is_id].groupby(["scene", "seed"]).pf_lon_bias.median().rename("lon_base")
 df = df.join(base, on=["scene", "seed"])
-df["lon_excess"] = df.pf_lon_med - df.lon_base
+df["lon_excess"] = (df.pf_lon_bias - df.lon_base).abs()
 df = df[df.lon_base.notna()].copy()
 
 COHERENT = ["lateral_shift", "longitudinal_shift", "rotation_deg"]

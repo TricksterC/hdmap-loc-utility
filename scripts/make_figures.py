@@ -25,9 +25,9 @@ COHERENT = ["lateral_shift", "longitudinal_shift", "rotation_deg"]
 GROUP_OF = {
     **{k: "shift or rotation" for k in COHERENT},
     **{k: "elements missing" for k in
-       ("element_dropout", "drop_dividers", "drop_transverse", "drop_all", "range_m")},
-        **{k: "extra or noisy elements" for k in
-       ("jitter_sigma", "false_dividers", "false_stop_lines")},
+    ("element_dropout", "drop_dividers", "drop_transverse", "drop_all", "range_m")},
+    **{k: "extra or noisy elements" for k in
+    ("jitter_sigma", "false_dividers", "false_stop_lines")},
 }
 GROUPS = {"shift or rotation": "#D55E00", "elements missing": "#0072B2",
           "extra or noisy elements": "#009E73"}
@@ -43,9 +43,9 @@ def load(stem):
     df = df.drop_duplicates(["scene", "kind", "value", "seed"])
     df = df[df.path_len > 10.0].copy()
     is_id = np.array([IDENTITY.get(k) == v for k, v in zip(df.kind, df.value)])
-    base = df[is_id].groupby(["scene", "seed"]).pf_lon_med.median().rename("lon_base")
+    base = df[is_id].groupby(["scene", "seed"]).pf_lon_bias.median().rename("lon_base")
     df = df.join(base, on=["scene", "seed"])
-    df["lon_excess"] = df.pf_lon_med - df.lon_base
+    df["lon_excess"] = (df.pf_lon_bias - df.lon_base).abs()
     return df
 
 
